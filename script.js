@@ -1,13 +1,7 @@
-// JavaScript actualizado
 document.addEventListener("DOMContentLoaded", function() {
-    const backBtn = document.getElementById("backBtn");
+    const searchInput = document.getElementById("searchInput");
     const characterContainer = document.getElementById("characterContainer");
     const displayedCharacters = new Set(); // Conjunto para almacenar personajes mostrados
-
-    // Volver a cargar la página cuando se hace clic en el botón "Volver"
-    backBtn.addEventListener("click", function() {
-        window.location.reload();
-    });
 
     // Función para crear y agregar un personaje al contenedor
     function addCharacter(character) {
@@ -43,13 +37,31 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Obtener datos de personajes de la API
+    function fetchCharacterData(characterName) {
+        fetch(`https://thesimpsonsquoteapi.glitch.me/quotes?character=${characterName}`)
+            .then(response => response.json())
+            .then(data => {
+                characterContainer.innerHTML = ""; // Limpiar contenedor antes de agregar nuevos personajes
+                displayCharacterDetails(data);
+            })
+            .catch(error => console.log("Error fetching data:", error));
+    }
+
+    // Manejar la búsqueda cuando se presiona Enter en el campo de entrada
+    searchInput.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            const characterName = searchInput.value.trim().toLowerCase();
+            if (characterName !== "") {
+                fetchCharacterData(characterName);
+            }
+        }
+    });
+
+    // Inicialmente cargar algunos personajes al cargar la página
     fetch("https://thesimpsonsquoteapi.glitch.me/quotes?count=3")
         .then(response => response.json())
         .then(data => {
             displayCharacterDetails(data);
-
-            // Mostrar detalles del primer personaje
-            displayCharacterDetails(data[0]);
         })
         .catch(error => console.log("Error fetching data:", error));
 });
