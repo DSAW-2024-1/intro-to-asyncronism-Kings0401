@@ -27,32 +27,33 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Función para mostrar detalles de personajes
-    function displayCharacterDetails(characters) {
-        characters.forEach(character => {
+    async function displayCharacterDetails(characters) {
+        for (const character of characters) {
             // Verificar si el personaje ya ha sido mostrado
             if (!displayedCharacters.has(character.character)) {
                 addCharacter(character);
             }
-        });
+        }
     }
 
     // Obtener datos de personajes de la API
-    function fetchCharacterData(characterName) {
-        fetch(`https://thesimpsonsquoteapi.glitch.me/quotes?character=${characterName}`)
-            .then(response => response.json())
-            .then(data => {
-                characterContainer.innerHTML = ""; // Limpiar contenedor antes de agregar nuevos personajes
-                displayCharacterDetails(data);
-            })
-            .catch(error => console.log("Error fetching data:", error));
+    async function fetchCharacterData(characterName) {
+        try {
+            const response = await fetch(`https://thesimpsonsquoteapi.glitch.me/quotes?character=${characterName}`);
+            const data = await response.json();
+            characterContainer.innerHTML = ""; // Limpiar contenedor antes de agregar nuevos personajes
+            await displayCharacterDetails(data);
+        } catch (error) {
+            console.log("Error fetching data:", error);
+        }
     }
 
     // Manejar la búsqueda cuando se presiona Enter en el campo de entrada
-    searchInput.addEventListener("keypress", function(event) {
+    searchInput.addEventListener("keypress", async function(event) {
         if (event.key === "Enter") {
             const characterName = searchInput.value.trim().toLowerCase();
             if (characterName !== "") {
-                fetchCharacterData(characterName);
+                await fetchCharacterData(characterName);
             }
         }
     });
@@ -65,13 +66,13 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(error => console.log("Error fetching data:", error));
 
-        const randomBtn = document.getElementById("randomBtn");
-const randomCharacterContainer = document.getElementById("randomCharacter");
+    const randomBtn = document.getElementById("randomBtn");
+    const randomCharacterContainer = document.getElementById("randomCharacter");
 
-randomBtn.addEventListener("click", function() {
-    fetch("https://thesimpsonsquoteapi.glitch.me/quotes?count=1")
-        .then(response => response.json())
-        .then(data => {
+    randomBtn.addEventListener("click", async function() {
+        try {
+            const response = await fetch("https://thesimpsonsquoteapi.glitch.me/quotes?count=1");
+            const data = await response.json();
             const character = data[0];
 
             const characterBox = document.createElement("div");
@@ -93,9 +94,20 @@ randomBtn.addEventListener("click", function() {
             // Limpiar el contenedor antes de agregar un nuevo personaje
             randomCharacterContainer.innerHTML = "";
             randomCharacterContainer.appendChild(characterBox);
-        })
-        .catch(error => console.log("Error fetching data:", error));
-});
+        } catch (error) {
+            console.log("Error fetching data:", error);
+        }
+    });
 
-        
+    const backBtn = document.getElementById("backBtn");
+    backBtn.addEventListener("click", async function() {
+        fetch("https://thesimpsonsquoteapi.glitch.me/quotes?count=6")
+            .then(response => response.json())
+            .then(data => {
+                characterContainer.innerHTML = ""; // Limpiar contenedor antes de agregar nuevos personajes
+                displayedCharacters.clear(); // Limpiar conjunto de personajes mostrados
+                displayCharacterDetails(data);
+            })
+            .catch(error => console.log("Error fetching data:", error));
+    });
 });
