@@ -58,10 +58,44 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Inicialmente cargar algunos personajes al cargar la página
-    fetch("https://thesimpsonsquoteapi.glitch.me/quotes?count=3")
+    fetch("https://thesimpsonsquoteapi.glitch.me/quotes?count=6")
         .then(response => response.json())
         .then(data => {
             displayCharacterDetails(data);
         })
         .catch(error => console.log("Error fetching data:", error));
+
+        const randomBtn = document.getElementById("randomBtn");
+const randomCharacterContainer = document.getElementById("randomCharacter");
+
+randomBtn.addEventListener("click", function() {
+    fetch("https://thesimpsonsquoteapi.glitch.me/quotes?count=1")
+        .then(response => response.json())
+        .then(data => {
+            const character = data[0];
+
+            const characterBox = document.createElement("div");
+            characterBox.classList.add("character-box");
+
+            const characterName = document.createElement("h3");
+            characterName.textContent = character.character;
+
+            const characterImage = document.createElement("img");
+            characterImage.src = character.image;
+
+            const characterQuote = document.createElement("p");
+            characterQuote.textContent = character.quote;
+
+            characterBox.appendChild(characterImage);
+            characterBox.appendChild(characterName);
+            characterBox.appendChild(characterQuote);
+
+            // Limpiar el contenedor antes de agregar un nuevo personaje
+            randomCharacterContainer.innerHTML = "";
+            randomCharacterContainer.appendChild(characterBox);
+        })
+        .catch(error => console.log("Error fetching data:", error));
+});
+
+        
 });
