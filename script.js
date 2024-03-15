@@ -94,6 +94,9 @@ document.addEventListener("DOMContentLoaded", function() {
             // Limpiar el contenedor antes de agregar un nuevo personaje
             randomCharacterContainer.innerHTML = "";
             randomCharacterContainer.appendChild(characterBox);
+
+            // Ocultar los seis personajes iniciales
+            characterContainer.style.display = "none";
         } catch (error) {
             console.log("Error fetching data:", error);
         }
@@ -101,6 +104,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const backBtn = document.getElementById("backBtn");
     backBtn.addEventListener("click", async function() {
+        // Mostrar los seis personajes iniciales
+        characterContainer.style.display = "grid";
+        randomCharacterContainer.style.display = "none";
         fetch("https://thesimpsonsquoteapi.glitch.me/quotes?count=6")
             .then(response => response.json())
             .then(data => {
