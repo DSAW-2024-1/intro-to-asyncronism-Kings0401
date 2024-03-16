@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const searchInput = document.getElementById("searchInput");
     const characterContainer = document.getElementById("characterContainer");
     const displayedCharacters = new Set(); // Conjunto para almacenar personajes mostrados
+    let showingInitialCharacters = true; // Variable para rastrear si se están mostrando los seis personajes iniciales
 
     // Función para crear y agregar un personaje al contenedor
     function addCharacter(character) {
@@ -22,17 +23,21 @@ document.addEventListener("DOMContentLoaded", function() {
         characterBox.appendChild(characterQuote);
         characterContainer.appendChild(characterBox);
 
-        // Agregar el personaje al conjunto de personajes mostrados
-        displayedCharacters.add(character.character);
+        // Agregar el personaje al conjunto de personajes mostrados solo si se están mostrando los seis personajes iniciales
+        if (showingInitialCharacters) {
+            displayedCharacters.add(character.character);
+        }
     }
 
     // Función para mostrar detalles de personajes
-    async function displayCharacterDetails(characters) {
-        for (const character of characters) {
-            // Verificar si el personaje ya ha sido mostrado
-            if (!displayedCharacters.has(character.character)) {
-                addCharacter(character);
+    async function displayCharacterDetails(characters, limit = Infinity) {
+        for (let i = 0; i < characters.length && i < limit; i++) {
+            // Verificar si el personaje ya ha sido mostrado solo si se están mostrando los seis personajes iniciales
+            if (showingInitialCharacters && displayedCharacters.has(characters[i].character)) {
+                limit++;
+                continue;
             }
+            addCharacter(characters[i]);
         }
     }
 
@@ -62,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
     fetch("https://thesimpsonsquoteapi.glitch.me/quotes?count=6")
         .then(response => response.json())
         .then(data => {
-            displayCharacterDetails(data);
+            displayCharacterDetails(data, 6);
         })
         .catch(error => console.log("Error fetching data:", error));
 
@@ -97,6 +102,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             // Ocultar los seis personajes iniciales
             characterContainer.style.display = "none";
+            randomCharacterContainer.style.display = "block";
         } catch (error) {
             console.log("Error fetching data:", error);
         }
@@ -107,13 +113,24 @@ document.addEventListener("DOMContentLoaded", function() {
         // Mostrar los seis personajes iniciales
         characterContainer.style.display = "grid";
         randomCharacterContainer.style.display = "none";
-        fetch("https://thesimpsonsquoteapi.glitch.me/quotes?count=6")
-            .then(response => response.json())
-            .then(data => {
-                characterContainer.innerHTML = ""; // Limpiar contenedor antes de agregar nuevos personajes
-                displayedCharacters.clear(); // Limpiar conjunto de personajes mostrados
-                displayCharacterDetails(data);
-            })
-            .catch(error => console.log("Error fetching data:", error));
+
+        // Vaciar el conjunto de personajes mostrados solo si se están mostrando los seis personajes iniciales
+        if (showingInitialCharacters) {
+            displayedCharacters.clear();
+        }
+
+        // Cargar los seis personajes iniciales solo si se están mostrando los seis personajes iniciales
+        if (showingInitialCharacters) {
+            fetch("https://thesimpsonsquoteapi.glitch.me/quotes?count=6")
+                .then(response => response.json())
+                .then(data => {
+                    characterContainer.innerHTML = ""; // Limpiar contenedor antes de agregar nuevos personajes
+                    displayCharacterDetails(data, 6);
+                })
+                .catch(error => console.log("Error fetching data:", error));
+        }
+
+        // Cambiar el estado de la variable para indicar que no se están mostrando los seis personajes iniciales
+        showingInitialCharacters = false;
     });
 });
