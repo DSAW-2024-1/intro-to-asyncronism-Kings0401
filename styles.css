@@ -155,4 +155,25 @@ body {
     padding: 20px;
 }
 
+.parallax {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    animation: parallax 20s linear infinite;
+    width: 1200px;
+    height: 100%;
+    object-fit: cover;
+}
+
+@keyframes parallax {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+
 
