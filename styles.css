@@ -160,20 +160,20 @@ body {
     top: 0;
     left: 0;
     z-index: -1;
-    animation: parallax 20s linear infinite;
-    width: 1200px;
-    height: 100%;
+    width: 100%;
+    height: auto;
     object-fit: cover;
+    animation: parallax 40s linear infinite;
+    transform: translateX(100%); /* Iniciar desde la derecha */
 }
 
 @keyframes parallax {
     0% {
-        transform: translateX(0);
+        transform: translateX(100%);
     }
     100% {
         transform: translateX(-100%);
     }
 }
-
 
 
