@@ -2,6 +2,9 @@
 # Desarrollo de Aplicaciones Web
 ## Introducción al Asíncronismo
 
+## Gabriela Reyes Gonzalez
+
+## Link pagina: https://dsaw-2024-1.github.io/intro-to-asyncronism-Kings0401/
 
 ## Funcionalidades
 
