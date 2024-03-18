@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Los Simpson</title>
+</head>
+<body>
+    <div class="container">
+        <div class="images">
+            <img id="titulo" src="./assets/Titulo-simpson.png" alt="Los Simpson">
+            <img src="./assets/poster-simpson.png" alt="Poster">
+            <img src="./assets/nubes.png" class="parallax" alt="Nubes">
+        </div>
+        
+        <div class="characters">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Buscar personaje...">
+                <button class="search-btn" id="searchBtn">Buscar</button>
+                <button class="btn" id="randomBtn">Random Quote</button>
+                <button class="btn" id="backBtn">Volver</button> <!-- Botón para volver a mostrar los seis personajes -->
+            </div>
+            <div id="randomCharacter" class="character-container"></div>
+            <div id="characterContainer" class="character-container"></div>
+        </div>
+    </div>
+    <script src="./script.js"></script>
+</body>
+</html>
